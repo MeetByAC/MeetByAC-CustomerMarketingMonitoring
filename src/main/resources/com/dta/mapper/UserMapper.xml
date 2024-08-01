@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dta.mapper.UserMapper">
+    <!-- 修改用户 -->
+    <update id="update">
+        update user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="jobNumber != null and jobNumber != ''">
+                jobNumber = #{jobNumber},
+            </if>
+            <if test="dept != null">
+                dept = #{dept},
+            </if>
+            <if test="role != null">
+                role = #{role},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 批量删除用户 (8,9,10) -->
+    <delete id="delete">
+        delete from user
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 条件查询-->
+    <select id="list" resultType="com.dta.pojo.User">
+        select *
+        from user
+        <where>
+            <if test="jobNumber != null and jobNumber !=''">
+                jobNumber like concat('%', #{jobNumber}, '%')
+            </if>
+            <if test="dept != null">
+                and dept = #{dept}
+            </if>
+            <if test="role != null">
+                and role = #{role}
+            </if>
+        </where>
+    </select>
+</mapper>
