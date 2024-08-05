@@ -56,7 +56,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void save(User user) {
-        user.setPassword("123456");//这不是固定了密码了吗？
+        if(user.getPassword() == null || user.getPassword() == ""){
+            user.setPassword("123456");
+        }
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.insert(user);
