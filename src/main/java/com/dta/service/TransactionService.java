@@ -9,6 +9,7 @@ import java.util.List;
 public interface TransactionService {
 
 
+
     /**
      * 交易列表条件分页查询
      * @param page
@@ -16,7 +17,7 @@ public interface TransactionService {
      * @param customerManagerID
      * @return
      */
-    PageBean Transactionpage(Integer page, Integer pageSize, Integer customerManagerID);
+    PageBean page(Integer page, Integer pageSize, Integer customerManagerID);
 
     /**
      * 批量删除交易

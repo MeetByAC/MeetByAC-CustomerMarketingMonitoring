@@ -17,6 +17,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     private TransactionMapper transactionMapper;
 
+
+
     /**
      * 用户列表条件分页查询
      * @param page
@@ -25,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
      * @return
      */
     @Override
-    public PageBean Transactionpage(Integer page, Integer pageSize, Integer customerManagerID) {
+    public PageBean page(Integer page, Integer pageSize, Integer customerManagerID) {
         //1. 设置分页参数, 第一个参数表示从第几页开始，第二个参数表示一页显示多少条记录
         PageHelper.startPage(page, pageSize);
 
@@ -47,23 +49,34 @@ public class TransactionServiceImpl implements TransactionService {
         transactionMapper.delete(ids);
     }
 
-    //@TODO:上次写到这
     /**
      * 添加交易
      * @param transaction
      */
     @Override
     public void save(Transaction transaction) {
-
+        if(transaction.getCreateDate()==null) transaction.setCreateDate(LocalDateTime.now());
+        transaction.setUpdatedDate(LocalDateTime.now());
+        transactionMapper.insert(transaction);
     }
 
+    /**
+     * 根据id查询交易
+     * @param id
+     * @return
+     */
     @Override
     public Transaction listById(Integer id) {
-        return null;
+        return transactionMapper.listById(id);
     }
 
+    /**
+     * 修改交易
+     * @param transaction
+     */
     @Override
     public void update(Transaction transaction) {
-
+        transaction.setUpdatedDate(LocalDateTime.now());
+        transactionMapper.update(transaction);
     }
 }

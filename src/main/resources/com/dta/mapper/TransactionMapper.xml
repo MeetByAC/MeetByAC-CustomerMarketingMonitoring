@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dta.mapper.TransactionMapper">
+    <!-- 修改用户 -->
+    <update id="update">
+        update transaction
+        <set>
+            <if test="customerManagerID != null and customerManagerID != ''">
+                CustomerManagerID = #{customerManagerID},
+            </if>
+            <if test="customerName != null and customerName != ''">
+                CustomerName = #{customerName},
+            </if>
+            <if test="transactionDate != null and transactionDate != ''">
+                TransactionDate = #{transactionDate},
+            </if>
+            <if test="productName != null and productName !=''">
+                ProductName = #{productName},
+            </if>
+            <if test="transactionAmount != null and transactionAmount !=''">
+                TransactionAmount = #{transactionAmount},
+            </if>
+            <if test="marketingProgress != null and marketingProgress !=''">
+                MarketingProgress = #{marketingProgress},
+            </if>
+            <if test="customerRating != null and customerRating !=''">
+                CustomerRating = #{customerRating},
+            </if>
+            <if test="createDate != null and createDate !=''">
+                CreateDate = #{createDate},
+            </if>
+            <if test="updatedDate != null and updatedDate !=''">
+                UpdatedDate = #{updatedDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 批量删除用户 -->
+    <delete id="delete">
+        delete from transaction
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 条件查询-->
+    <select id="list" resultType="com.dta.pojo.Transaction">
+        select *
+        from transaction
+        <where>
+            <if test="jobNumber != null and jobNumber !=''">
+                jobNumber like concat('%', #{jobNumber}, '%')
+            </if>
+            <if test="dept != null">
+                and dept = #{dept}
+            </if>
+            <if test="role != null">
+                and role = #{role}
+            </if>
+        </where>
+    </select>
+</mapper>
