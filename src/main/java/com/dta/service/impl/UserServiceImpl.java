@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void save(User user) {
+        //如果没有设置密码，则使用123456作为默认密码
         if(user.getPassword() == null || user.getPassword() == ""){
             user.setPassword("123456");
         }
