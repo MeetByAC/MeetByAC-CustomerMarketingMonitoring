@@ -58,8 +58,14 @@
         </where>
     </select>
 
-    <!-- 查询客户经理信息 -->
-    <select id="findManagerInfo" resultType="com.dta.pojo.Manager">
-
+    <select id="findChurnNum" resultType="com.dta.pojo.Transaction">
+        SELECT COALESCE(COUNT(DISTINCT CustomerName),0) AS active_customers_coun
+        FROM transaction
+        WHERE CustomerName IN
+        <foreach item='item' index='index' collection='oldCustomers' open='(' separator=',' close=')'>
+            #{item}
+        </foreach>
+        AND CustomerManagerID = #{managerid}
+        AND transactionDate >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
     </select>
 </mapper>

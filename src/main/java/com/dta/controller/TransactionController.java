@@ -21,11 +21,18 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    /**
+     * 客户经理信息分页查询
+     * @param page
+     * @param pageSize
+     * @param administratorID
+     * @return
+     */
     @GetMapping("/managerPage")
     public Result managerPage(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer pageSize,
                        Integer administratorID){
-        log.info("交易列表分页查询, {},{},{}",page, pageSize, administratorID);
+        log.info("客户经理信息分页查询, {},{},{}",page, pageSize, administratorID);
         //调用service进行用户列表分页查询
         PageBean pageBean = transactionService.managerPage(page, pageSize, administratorID);
         return Result.success(pageBean);

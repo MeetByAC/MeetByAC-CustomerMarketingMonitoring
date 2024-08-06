@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class Manager {
     private int managerID;
     private int salesVolume;
-    private float salesGrowth;
-    private int newDevelpment;
-    private float churnRate;
+    private double salesGrowth;
+    private int newCustomersNum;
+    private double churnRate;
     private float satisfaction;
 }
