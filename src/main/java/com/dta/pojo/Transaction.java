@@ -19,6 +19,6 @@ public class Transaction {
     private BigDecimal transactionAmount; //交易金额，格式为10位数字，2位小数
     private String marketingProgress; //营销进度
     private int customerRating; //客户评分，范围1-5
-    private LocalDateTime createDate; //创建时间
+    private LocalDateTime createdDate; //创建时间
     private LocalDateTime updatedDate; //更新时间
 }

@@ -44,6 +44,12 @@ public interface TransactionService {
      */
     void update(Transaction transaction);
 
-
-
+    /**
+     * 按管理员分页查询客户经理信息
+     * @param page
+     * @param pageSize
+     * @param administratorID
+     * @return
+     */
+    PageBean managerPage(Integer page, Integer pageSize, Integer administratorID);
 }

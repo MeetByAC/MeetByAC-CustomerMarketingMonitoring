@@ -1,27 +1,30 @@
 package com.dta.mapper;
 
+import com.dta.pojo.Manager;
 import com.dta.pojo.Transaction;
 import com.dta.pojo.User;
 import com.dta.service.TransactionService;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
+@Mapper
 public interface TransactionMapper {
     /**
      * 交易列表条件分页查询
      * @param customerManagerID
      * @return
      */
-    List<User> list(@Param("CustomerManagerID") Integer customerManagerID);
+    List<Transaction> list(@Param("customerManagerID") Integer customerManagerID);
 
     /**
      * 批量删除交易
-     * @param customerManagerID
+     * @param ids
      */
-    void delete(@Param("TransactionID") List<Integer> customerManagerID);
+    void delete(@Param("ids") List<Integer> ids);
 
     /**
      * 添加交易
@@ -36,7 +39,7 @@ public interface TransactionMapper {
      * @param customerManagerID
      * @return
      */
-    @Select("select * from user where CustomerManagerID = #{customerManagerID}")
+    @Select("select * from transaction where TransactionID = #{customerManagerID}")
     Transaction listById(Integer customerManagerID);
 
     /**
@@ -44,6 +47,20 @@ public interface TransactionMapper {
      * @param transaction
      */
     void update(Transaction transaction);
+
+    /**
+     * 根据管理员查询其对应的部门编号
+     * @param administratorID
+     * @return
+     */
+    @Select("select dept from user where id = #{administratorID}")
+    Integer findDept(Integer administratorID);
+
+
+    @Select("select id from user where dept = #{dept}")
+    List<Integer> findManager(Integer dept);
+
+    Manager findManagerInfo(@Param("managerid") Integer managerid);
 
 
 
