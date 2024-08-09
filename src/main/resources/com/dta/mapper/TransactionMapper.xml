@@ -52,8 +52,14 @@
         select *
         from transaction
         <where>
-            <if test="customerManagerID != null and customerManagerID !=''">
-                CustomerManagerID = #{customerManagerID}
+            <if test="jobNumber != null and jobNumber !=''">
+                JobNumber = #{jobNumber}
+            </if>
+            <if test="startDate != null and startDate !=''">
+                AND TransactionDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate !=''">
+                AND TransactionDate &lt;= #{endDate}
             </if>
         </where>
     </select>

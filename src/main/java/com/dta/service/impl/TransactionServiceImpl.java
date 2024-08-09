@@ -18,19 +18,19 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionMapper transactionMapper;
 
     /**
-     * 用户列表条件分页查询
+     * 交易列表条件分页查询
      * @param page
      * @param pageSize
      * @param customerManagerID
      * @return
      */
     @Override
-    public PageBean page(Integer page, Integer pageSize, Integer customerManagerID) {
+    public PageBean page(Integer page, Integer pageSize, String jobNumber, String startDate, String endDate) {
         //1. 设置分页参数, 第一个参数表示从第几页开始，第二个参数表示一页显示多少条记录
         PageHelper.startPage(page, pageSize);
 
         //2. 执行查询
-        List<Transaction> transactionList = transactionMapper.list(customerManagerID);
+        List<Transaction> transactionList = transactionMapper.list(jobNumber, startDate, endDate);
         Page<Transaction> p = (Page<Transaction>) transactionList;
 
         //3. 封装PageBean对象
@@ -97,6 +97,7 @@ public class TransactionServiceImpl implements TransactionService {
         //2. 执行查询
         List< Manager > managerList = new ArrayList<>();
         for(Integer managerid: managerids){
+            String managerName = transactionMapper.findManagerName(managerid);
             Integer salesVolume = transactionMapper.findSalesVolume(managerid);
             double salesGrowthTYear =transactionMapper.findSalesGrowthTYear(managerid)==null? 0.00001: (double) transactionMapper.findSalesGrowthTYear(managerid);
 
@@ -114,6 +115,7 @@ public class TransactionServiceImpl implements TransactionService {
             float satisfaction = transactionMapper.findSatisfaction(managerid);
             Manager managerThis = new Manager();
             managerThis.setManagerID(managerid);
+            managerThis.setManagerName(managerName);
             managerThis.setSalesVolume(salesVolume);
             managerThis.setSalesGrowth(salesGrowth);
             managerThis.setNewCustomersNum(newCustomersNum);

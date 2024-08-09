@@ -48,10 +48,12 @@ public class TransactionController {
     @GetMapping("/page")
     public Result page(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer pageSize,
-                       Integer customerManagerID){
-        log.info("交易列表分页查询, {},{},{}", page, pageSize, customerManagerID);
+                       String jobNumber,
+                       String startDate,
+                       String endDate){
+        log.info("交易列表分页查询, {},{},{}", page, pageSize, jobNumber, startDate, endDate);
         //调用service进行用户列表分页查询
-        PageBean pageBean = transactionService.page(page, pageSize, customerManagerID);
+        PageBean pageBean = transactionService.page(page, pageSize, jobNumber, startDate, endDate);
         return Result.success(pageBean);
     }
 

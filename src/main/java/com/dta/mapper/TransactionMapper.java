@@ -15,10 +15,12 @@ import java.util.List;
 public interface TransactionMapper {
     /**
      * 交易列表条件分页查询
-     * @param customerManagerID
+     * @param jobNumber
      * @return
      */
-    List<Transaction> list(@Param("customerManagerID") Integer customerManagerID);
+    List<Transaction> list(@Param("jobNumber") String jobNumber,
+                           @Param("startDate") String startDate,
+                           @Param("endDate") String endDate);
 
     /**
      * 批量删除交易
@@ -135,8 +137,16 @@ public interface TransactionMapper {
      * @return
      */
     @Select("SELECT COALESCE(AVG(customerRating), 0) AS average_rating\n" +
-            "FROM transaction\n" +
+            "FROM transaction " +
             "WHERE customerManagerID = #{managerid};")
     float findSatisfaction(Integer managerid);
+
+    /**
+     * 查询客户经理姓名
+     * @param managerid
+     * @return
+     */
+    @Select("SELECT username FROM user WHERE id = #{managerid}")
+    String findManagerName(Integer managerid);
 
 }

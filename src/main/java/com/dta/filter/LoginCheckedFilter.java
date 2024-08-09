@@ -15,7 +15,7 @@ import java.io.IOException;
  * 拦截器
  *
  */
-@WebFilter(urlPatterns = "/*")
+//@WebFilter(urlPatterns = "/*")
 public class LoginCheckedFilter implements Filter {
     /**
      * 拦截方法，只要资源链接被拦截到，就会触发此方法

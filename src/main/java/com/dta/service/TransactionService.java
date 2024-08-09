@@ -17,7 +17,7 @@ public interface TransactionService {
      * @param customerManagerID
      * @return
      */
-    PageBean page(Integer page, Integer pageSize, Integer customerManagerID);
+    PageBean page(Integer page, Integer pageSize, String jobNumber, String startDate, String endDate);
 
     /**
      * 批量删除交易
