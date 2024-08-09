@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户列表条件分页查询
-     *
      * @param page
      * @param pageSize
      * @param jobNumber
@@ -57,7 +56,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 批量删除用户
-     *
      * @param ids
      */
     @Override
@@ -67,12 +65,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 添加用户
-     *
      * @param user
      */
     @Override
     public void save(User user) {
-        user.setPassword("123456");//这不是固定了密码了吗？
+        //如果没有设置密码，则使用123456作为默认密码
+        if(user.getPassword() == null || user.getPassword() == ""){
+            user.setPassword("123456");
+        }
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.insert(user);
@@ -80,7 +80,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据id查询用户
-     *
      * @param id
      * @return
      */
@@ -91,7 +90,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 修改用户
-     *
      * @param user
      */
     @Override

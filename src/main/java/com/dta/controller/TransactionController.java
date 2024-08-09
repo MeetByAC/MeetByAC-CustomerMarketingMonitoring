@@ -22,13 +22,30 @@ public class TransactionController {
     private TransactionService transactionService;
 
     /**
+     * 客户经理信息分页查询
+     * @param page
+     * @param pageSize
+     * @param administratorID
+     * @return
+     */
+    @GetMapping("/managerPage")
+    public Result managerPage(@RequestParam(defaultValue = "1") Integer page,
+                       @RequestParam(defaultValue = "10") Integer pageSize,
+                       Integer administratorID){
+        log.info("客户经理信息分页查询, {},{},{}",page, pageSize, administratorID);
+        //调用service进行用户列表分页查询
+        PageBean pageBean = transactionService.managerPage(page, pageSize, administratorID);
+        return Result.success(pageBean);
+    }
+
+    /**
      * 交易按客户经理id分页查询
      * @param page
      * @param pageSize
      * @param customerManagerID
      * @return
      */
-    @GetMapping
+    @GetMapping("/page")
     public Result page(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer pageSize,
                        Integer customerManagerID){

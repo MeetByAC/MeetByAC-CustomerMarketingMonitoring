@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dta.mapper.TransactionMapper">
-    <!-- 修改用户 -->
+    <!-- 修改交易 -->
     <update id="update">
         update transaction
         <set>
@@ -13,7 +13,7 @@
             <if test="customerName != null and customerName != ''">
                 CustomerName = #{customerName},
             </if>
-            <if test="transactionDate != null and transactionDate != ''">
+            <if test="transactionDate != null">
                 TransactionDate = #{transactionDate},
             </if>
             <if test="productName != null and productName !=''">
@@ -28,20 +28,20 @@
             <if test="customerRating != null and customerRating !=''">
                 CustomerRating = #{customerRating},
             </if>
-            <if test="createDate != null and createDate !=''">
-                CreateDate = #{createDate},
+            <if test="createdDate != null">
+                CreatedDate = #{createdDate},
             </if>
-            <if test="updatedDate != null and updatedDate !=''">
+            <if test="updatedDate != null">
                 UpdatedDate = #{updatedDate},
             </if>
         </set>
-        where id = #{id}
+        where TransactionID = #{transactionID}
     </update>
 
-    <!-- 批量删除用户 -->
+    <!-- 批量删除交易 -->
     <delete id="delete">
         delete from transaction
-        where id in
+        where TransactionID in
         <foreach collection="ids" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>
@@ -52,15 +52,20 @@
         select *
         from transaction
         <where>
-            <if test="jobNumber != null and jobNumber !=''">
-                jobNumber like concat('%', #{jobNumber}, '%')
-            </if>
-            <if test="dept != null">
-                and dept = #{dept}
-            </if>
-            <if test="role != null">
-                and role = #{role}
+            <if test="customerManagerID != null and customerManagerID !=''">
+                CustomerManagerID = #{customerManagerID}
             </if>
         </where>
+    </select>
+
+    <select id="findChurnNum" resultType="com.dta.pojo.Transaction">
+        SELECT COALESCE(COUNT(DISTINCT CustomerName),0) AS active_customers_coun
+        FROM transaction
+        WHERE CustomerName IN
+        <foreach item='item' index='index' collection='oldCustomers' open='(' separator=',' close=')'>
+            #{item}
+        </foreach>
+        AND CustomerManagerID = #{managerid}
+        AND transactionDate >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
     </select>
 </mapper>
