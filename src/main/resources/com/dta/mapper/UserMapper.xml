@@ -54,4 +54,9 @@
             </if>
         </where>
     </select>
+
+<!--    <select id="findUser" resultType="com.dta.pojo.User">-->
+<!--        select * from cmm.user-->
+<!--        where jobNumber = #{jobNumber} and password = #{password}-->
+<!--    </select>-->
 </mapper>

@@ -41,4 +41,11 @@ public interface UserService {
      * @param user
      */
     void update(User user);
+
+    /**
+     * 用户登陆
+     * @param user
+     * @return
+     */
+    User userLogin(User user);
 }
