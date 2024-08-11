@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Manager {
     private int managerID; //客户经理ID
+    private String jobNumber; //客户经理工号
     private String managerName; //客户经理姓名
     private int salesVolume; //销售总额
     private double salesGrowth;//销售增长率（今年销售额-去年销售额）/去年销售额

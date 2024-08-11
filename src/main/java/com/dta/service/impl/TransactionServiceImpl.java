@@ -21,7 +21,7 @@ public class TransactionServiceImpl implements TransactionService {
      * 交易列表条件分页查询
      * @param page
      * @param pageSize
-     * @param customerManagerID
+     * @param jobNumber
      * @return
      */
     @Override
@@ -82,39 +82,41 @@ public class TransactionServiceImpl implements TransactionService {
      * 按管理员分页查询客户经理信息
      * @param page
      * @param pageSize
-     * @param administratorID
+     * @param jobNumber
      * @return
      */
     @Override
-    public PageBean managerPage(Integer page, Integer pageSize, Integer administratorID) {
+    public PageBean managerPage(Integer page, Integer pageSize, String jobNumber) {
         //1. 设置分页参数, 第一个参数表示从第几页开始，第二个参数表示一页显示多少条记录
         PageHelper.startPage(page, pageSize);
 
         //2.查询管理员所在部门并查找该部门下客户经理的id的list
-        Integer dept = transactionMapper.findDept(administratorID);
-        List<Integer> managerids = transactionMapper.findManager(dept);
+        Integer dept = transactionMapper.findDept(jobNumber);
+        List<String> mJobNumbers = transactionMapper.findManager(dept);
 
         //2. 执行查询
         List< Manager > managerList = new ArrayList<>();
-        for(Integer managerid: managerids){
-            String managerName = transactionMapper.findManagerName(managerid);
-            Integer salesVolume = transactionMapper.findSalesVolume(managerid);
-            double salesGrowthTYear =transactionMapper.findSalesGrowthTYear(managerid)==null? 0.00001: (double) transactionMapper.findSalesGrowthTYear(managerid);
+        for(String mJobNumber: mJobNumbers){
+            Integer managerID = transactionMapper.findManagerID(mJobNumber);
+            String managerName = transactionMapper.findManagerName(mJobNumber);
+            Integer salesVolume = transactionMapper.findSalesVolume(mJobNumber);
+            double salesGrowthTYear =transactionMapper.findSalesGrowthTYear(mJobNumber)==null? 0.00001: (double) transactionMapper.findSalesGrowthTYear(mJobNumber);
 
-            double salesGrowthLYear =transactionMapper.findSalesGrowthLYear(managerid)==null? 0.00001: (double) transactionMapper.findSalesGrowthLYear(managerid);
+            double salesGrowthLYear =transactionMapper.findSalesGrowthLYear(mJobNumber)==null? 0.00001: (double) transactionMapper.findSalesGrowthLYear(mJobNumber);
 
             double salesGrowth = (salesGrowthTYear-salesGrowthLYear)/salesGrowthLYear;
-            List<String> oldCustomers = transactionMapper.findOldCustomers(managerid);
-            Integer newCustomersNum = transactionMapper.findNewCustomersNum(managerid);
+            List<String> oldCustomers = transactionMapper.findOldCustomers(mJobNumber);
+            Integer newCustomersNum = transactionMapper.findNewCustomersNum(mJobNumber);
             Integer churnNum = 0;
             if(oldCustomers.size()!=0){
-                churnNum = transactionMapper.findChurnNum(managerid, oldCustomers);
+                churnNum = transactionMapper.findChurnNum(mJobNumber, oldCustomers);
             }
             if(churnNum==null) churnNum=0;
             double churnRate =oldCustomers.size()==0?0: (double)churnNum/(double)oldCustomers.size();
-            float satisfaction = transactionMapper.findSatisfaction(managerid);
+            float satisfaction = transactionMapper.findSatisfaction(mJobNumber);
             Manager managerThis = new Manager();
-            managerThis.setManagerID(managerid);
+            managerThis.setManagerID(managerID);
+            managerThis.setJobNumber(mJobNumber);
             managerThis.setManagerName(managerName);
             managerThis.setSalesVolume(salesVolume);
             managerThis.setSalesGrowth(salesGrowth);

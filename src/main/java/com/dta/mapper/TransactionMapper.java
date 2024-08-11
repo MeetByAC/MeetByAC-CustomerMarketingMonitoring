@@ -32,17 +32,17 @@ public interface TransactionMapper {
      * 添加交易
      * @param transaction
      */
-    @Insert("insert into transaction(CustomerManagerID, CustomerName, TransactionDate, ProductName, TransactionAmount, MarketingProgress, CustomerRating, CreatedDate, UpdatedDate) " +
-            "values (#{customerManagerID}, #{customerName}, #{transactionDate}, #{productName}, #{transactionAmount}, #{marketingProgress}, #{customerRating}, #{createdDate}, #{updatedDate})")
+    @Insert("insert into transaction(JobNumber, CustomerName, TransactionDate, ProductName, TransactionAmount, MarketingProgress, CustomerRating, CreatedDate, UpdatedDate) " +
+            "values (#{jobNumber}, #{customerName}, #{transactionDate}, #{productName}, #{transactionAmount}, #{marketingProgress}, #{customerRating}, #{createdDate}, #{updatedDate})")
     void insert(Transaction transaction);
 
     /**
-     * 根据客户经理id查询（暂时用不上）
-     * @param customerManagerID
+     * 根据交易id查询（暂时用不上）
+     * @param id
      * @return
      */
-    @Select("select * from transaction where TransactionID = #{customerManagerID}")
-    Transaction listById(Integer customerManagerID);
+    @Select("select * from transaction where TransactionID = #{id}")
+    Transaction listById(Integer id);
 
     /**
      * 修改交易
@@ -52,48 +52,48 @@ public interface TransactionMapper {
 
     /**
      * 根据管理员查询其对应的部门编号
-     * @param administratorID
+     * @param jobNumber
      * @return
      */
-    @Select("select dept from user where id = #{administratorID}")
-    Integer findDept(Integer administratorID);
+    @Select("select dept from user where jobNumber = #{jobNumber}")
+    Integer findDept(String jobNumber);
 
     /**
      * 查找该部门下面的客户经理id
      * @param dept
      * @return
      */
-    @Select("select id from user where dept = #{dept}")
-    List<Integer> findManager(Integer dept);
+    @Select("select jobNumber from user where dept = #{dept}")
+    List<String> findManager(Integer dept);
 
     /**
      * 查找该客户经理的销售总额
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
-    @Select("select COALESCE(SUM(TransactionAmount), 0) from transaction where CustomerManagerID = #{managerid}")
-    Integer findSalesVolume(Integer managerid);
+    @Select("select COALESCE(SUM(TransactionAmount), 0) from transaction where JobNumber = #{mJobNumber}")
+    Integer findSalesVolume(String mJobNumber);
 
     /**
      * 查找该客户经理今年的销售额
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
-    @Select("SELECT COALESCE(SUM(TransactionAmount),0) AS AmountTYear FROM transaction WHERE EXTRACT(YEAR FROM TransactionDate) = EXTRACT(YEAR FROM CURRENT_DATE) AND CustomerManagerID = #{managerid};")
-    Integer findSalesGrowthTYear(Integer managerid);
+    @Select("SELECT COALESCE(SUM(TransactionAmount),0) AS AmountTYear FROM transaction WHERE EXTRACT(YEAR FROM TransactionDate) = EXTRACT(YEAR FROM CURRENT_DATE) AND JobNumber = #{mJobNumber};")
+    Integer findSalesGrowthTYear(String mJobNumber);
 
     /**
      * 查找该客户经理去年的销售额
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
-    @Select("SELECT COALESCE(SUM(TransactionAmount),0) AS AmountLYear FROM transaction WHERE EXTRACT(YEAR FROM TransactionDate) = EXTRACT(YEAR FROM CURRENT_DATE)-1 AND CustomerManagerID = #{managerid};")
-    Integer findSalesGrowthLYear(Integer managerid);
+    @Select("SELECT COALESCE(SUM(TransactionAmount),0) AS AmountLYear FROM transaction WHERE EXTRACT(YEAR FROM TransactionDate) = EXTRACT(YEAR FROM CURRENT_DATE)-1 AND JobNumber = #{mJobNumber};")
+    Integer findSalesGrowthLYear(String mJobNumber);
 
     /**
      *
      * 查找该客户经理开发的新客户数量
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
     @Select("SELECT COALESCE(COUNT(DISTINCT customerName),0) AS unique_customers_count " +
@@ -103,13 +103,13 @@ public interface TransactionMapper {
             "    SELECT customerName" +
             "    FROM transaction " +
             "    WHERE transactionDate < DATE_SUB(CURDATE(), INTERVAL 1 YEAR) " +
-            "    AND CustomerManagerID = #{managerid}" +
+            "    AND JobNumber = #{mJobNumber}" +
             ");")
-    Integer findNewCustomersNum(Integer managerid);
+    Integer findNewCustomersNum(String mJobNumber);
 
     /**
      * 查找该客户经理老客户Name
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
     @Select("SELECT DISTINCT customerName " +
@@ -117,36 +117,39 @@ public interface TransactionMapper {
             "WHERE customerName IN (" +
             "    SELECT customerName " +
             "    FROM transaction" +
-            "    WHERE CustomerManagerID = #{managerid}" +
+            "    WHERE JobNumber = #{mJobNumber}" +
             "    GROUP BY customerName" +
             "    HAVING MIN(transactionDate) <= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)" +
             ");")
-    List<String> findOldCustomers(Integer managerid);
+    List<String> findOldCustomers(String mJobNumber);
 
     /**
      * 查找该客户经理老客户留存数量
-     * @param managerid
+     * @param mJobNumber
      * @param oldCustomers
      * @return
      */
-    Integer findChurnNum(@Param("managerid") Integer managerid, @Param("oldCustomers") List<String> oldCustomers);
+    Integer findChurnNum(@Param("mJobNumber") String mJobNumber, @Param("oldCustomers") List<String> oldCustomers);
 
     /**
      * 计算该客户经理满意度
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
     @Select("SELECT COALESCE(AVG(customerRating), 0) AS average_rating\n" +
             "FROM transaction " +
-            "WHERE customerManagerID = #{managerid};")
-    float findSatisfaction(Integer managerid);
+            "WHERE jobNumber = #{mJobNumber};")
+    float findSatisfaction(String mJobNumber);
 
     /**
      * 查询客户经理姓名
-     * @param managerid
+     * @param mJobNumber
      * @return
      */
-    @Select("SELECT username FROM user WHERE id = #{managerid}")
-    String findManagerName(Integer managerid);
+    @Select("SELECT username FROM user WHERE jobNumber = #{mJobNumber}")
+    String findManagerName(String mJobNumber);
+
+    @Select("SELECT id FROM user WHERE jobNumber = #{mJobNumber}")
+    Integer findManagerID(String mJobNumber);
 
 }

@@ -25,16 +25,16 @@ public class TransactionController {
      * 客户经理信息分页查询
      * @param page
      * @param pageSize
-     * @param administratorID
+     * @param jobNumber
      * @return
      */
     @GetMapping("/managerPage")
     public Result managerPage(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer pageSize,
-                       Integer administratorID){
-        log.info("客户经理信息分页查询, {},{},{}",page, pageSize, administratorID);
+                              String jobNumber){
+        log.info("客户经理信息分页查询, {},{},{}",page, pageSize, jobNumber);
         //调用service进行用户列表分页查询
-        PageBean pageBean = transactionService.managerPage(page, pageSize, administratorID);
+        PageBean pageBean = transactionService.managerPage(page, pageSize, jobNumber);
         return Result.success(pageBean);
     }
 
@@ -42,7 +42,7 @@ public class TransactionController {
      * 交易按客户经理id分页查询
      * @param page
      * @param pageSize
-     * @param customerManagerID
+     * @param jobNumber
      * @return
      */
     @GetMapping("/page")

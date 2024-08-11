@@ -7,8 +7,8 @@
     <update id="update">
         update transaction
         <set>
-            <if test="customerManagerID != null and customerManagerID != ''">
-                CustomerManagerID = #{customerManagerID},
+            <if test="jobNumber != null and jobNumber != ''">
+                JobNumber = #{jobNumber},
             </if>
             <if test="customerName != null and customerName != ''">
                 CustomerName = #{customerName},
@@ -71,7 +71,7 @@
         <foreach item='item' index='index' collection='oldCustomers' open='(' separator=',' close=')'>
             #{item}
         </foreach>
-        AND CustomerManagerID = #{managerid}
+        AND jobNumber = #{mJobNumber}
         AND transactionDate >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
     </select>
 </mapper>

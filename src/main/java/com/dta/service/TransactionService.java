@@ -9,12 +9,13 @@ import java.util.List;
 public interface TransactionService {
 
 
-
     /**
      * 交易列表条件分页查询
      * @param page
      * @param pageSize
-     * @param customerManagerID
+     * @param jobNumber
+     * @param startDate
+     * @param endDate
      * @return
      */
     PageBean page(Integer page, Integer pageSize, String jobNumber, String startDate, String endDate);
@@ -48,8 +49,8 @@ public interface TransactionService {
      * 按管理员分页查询客户经理信息
      * @param page
      * @param pageSize
-     * @param administratorID
+     * @param jobNumber
      * @return
      */
-    PageBean managerPage(Integer page, Integer pageSize, Integer administratorID);
+    PageBean managerPage(Integer page, Integer pageSize, String jobNumber);
 }
