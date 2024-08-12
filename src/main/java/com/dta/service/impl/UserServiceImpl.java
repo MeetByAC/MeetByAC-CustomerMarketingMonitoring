@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         user.setUpdateTime(LocalDateTime.now());
+        user.setPassword(DigestUtils.md5DigestAsHex((SALT + user.getPassword()).getBytes()));
         userMapper.update(user);
     }
 
