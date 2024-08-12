@@ -111,16 +111,17 @@ public class UserServiceImpl implements UserService {
         String jobNumber = user.getJobNumber();
         String password = user.getPassword();
         int role = user.getRole();
+
         //1.校验
         //非空
         if(StringUtils.isAnyBlank(jobNumber,password)){
             return null;
         }
         //2.加密
-        //String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
-        //System.out.println(encryptPassword);
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
+
         //账户不能重复
-        User userLogin = userMapper.findUser(jobNumber,password,role);
+        User userLogin = userMapper.findUser(jobNumber,encryptPassword,role);
 
         return userLogin;
     }

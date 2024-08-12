@@ -6,6 +6,7 @@ import com.dta.pojo.Result;
 import com.dta.pojo.User;
 import com.dta.service.UserService;
 import com.dta.utils.JwtUtils;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,11 +28,14 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 import javax.crypto.Cipher;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import org.springframework.web.bind.annotation.*;
+
+import static com.dta.utils.SM2Utils.decrypt;
 
 
 /**
@@ -45,14 +49,18 @@ public class LoginController {
     @Resource
     private UserMapper userMapper;
 
-    //确保BouncyCastle提供者被添加到Java的安全提供者列表中，提供SM2加密算法的实现
-//    static {
-//        Security.addProvider(new BouncyCastleProvider());
-//    }
+    //SM2 私钥
+    private static final String PRIVATE_KEY = "308193020100301306072a8648ce3d020106082a811ccf5501822d04793077020101042024ff295180b9323dda62df6147012a3a3c0fb8de29de48dc6eb2c8141f85e699a00a06082a811ccf5501822da1440342000460c160974d6501cb8776b97bc2d0bac854facd7f8d7595f8653fbcb8c8ab89d34dd0cf52d865ceb19ef9a4a67b1dfe6052b7fc323aa3b680a785c74c258f197f";
 
+
+    //加入国密SM2之后的登录接口
     @PostMapping("/login")
-    public Result login(@RequestBody User user){
+    public Result login(@RequestBody User user) throws Exception {
 
+        //对加密数据进行解密
+        String encryptPassword = user.getPassword();
+        String decryptPassword = decrypt(PRIVATE_KEY,encryptPassword);
+        user.setPassword(decryptPassword);
 
         User userLogin = userService.userLogin(user);
 
@@ -72,61 +80,8 @@ public class LoginController {
             //把生成的令牌封装到响应数据中
             return Result.success(jwt);
         }
-    }
 
-    //加入国密SM2之后的登录接口
-//    @PostMapping("/login")
-//    public Result login(@RequestBody Map<String, String> body){
-//        try {
-//            String encryptedData = body.get("encrypted");
-//            String privateKeyStr = "你的SM2私钥"; // 替换为实际的SM2私钥
-//
-//            byte[] privateKeyBytes = Hex.decode(privateKeyStr);
-//            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-//            KeyFactory keyFactory = KeyFactory.getInstance("EC", BouncyCastleProvider.PROVIDER_NAME);
-//            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-//
-//            Cipher cipher = Cipher.getInstance("SM2", BouncyCastleProvider.PROVIDER_NAME);
-//            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-//
-//            byte[] decryptedData = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
-//            String decryptedText = new String(decryptedData, StandardCharsets.UTF_8);
-//
-//            // 解析用户信息
-//            JSONObject userInfo = new JSONObject(decryptedText.isEmpty());
-//            String jobNumber = userInfo.getString("jobNumber");
-//            String password = userInfo.getString("password");
-//            int role = userInfo.getInteger("role");
-//
-//            //在数据库中进行查询
-//            User newUser = new User();
-//            newUser.setJobNumber(jobNumber);
-//            newUser.setPassword(password);
-//            newUser.setRole(role);
-//
-//            User userLogin = userService.userLogin(newUser);
-//
-//            if(userLogin == null){
-//                 //登录失败;没有找到用户名或者密码
-//                 return Result.error("登录失败！");
-//            }else {
-//                //登录成功
-//                Map<String,Object> map = new HashMap<>();
-//                map.put("userName",userLogin.getUsername());
-//                map.put("jobNumber",userLogin.getJobNumber());
-//                map.put("role",userLogin.getRole());
-//                map.put("dept",userMapper.findDept(userLogin.getDept()));
-//                //生成令牌
-//                String jwt = JwtUtils.generateJwt(map);
-//
-//                //把生成的令牌封装到响应数据中
-//                return Result.success(jwt);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return Result.error("登录失败！");
-//        }
-//    }
+    }
 
     @GetMapping("/logout")
     public Result logout(){
