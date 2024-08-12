@@ -36,11 +36,11 @@ public interface UserMapper {
     /**
      * 根据id查询用户
      *
-     * @param id
+     * @param jobNumber
      * @return
      */
-    @Select("select * from user where id = #{id}")
-    User listById(Integer id);
+    @Select("select * from user where jobNumber = #{jobNumber}")
+    User listByJobNumbe(String jobNumber);
 
     /**
      * 修改用户
