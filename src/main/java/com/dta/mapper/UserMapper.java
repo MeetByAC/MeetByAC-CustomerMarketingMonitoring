@@ -40,7 +40,8 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where jobNumber = #{jobNumber}")
-    User listByjobNumber(String jobNumber);
+    User listByJobNumbe(String jobNumber);
+
 
     /**
      * 修改用户

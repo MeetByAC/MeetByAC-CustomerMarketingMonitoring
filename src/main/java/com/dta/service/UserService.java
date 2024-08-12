@@ -34,7 +34,11 @@ public interface UserService {
      * @param jobNumber
      * @return
      */
+<<<<<<< HEAD
     User listByjobNumber(String jobNumber);
+=======
+    User listByJobNumber(String jobNumber);
+>>>>>>> 81e4df66021df47d7f81cb1193d8c79f5a6e7192
 
     /**
      * 修改用户
