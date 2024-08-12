@@ -30,11 +30,11 @@ public interface UserService {
     void save(User user);
 
     /**
-     * 根据id查询用户
-     * @param id
+     * 根据工号查询用户
+     * @param jobNumber
      * @return
      */
-    User listById(Integer id);
+    User listByjobNumber(String jobNumber);
 
     /**
      * 修改用户

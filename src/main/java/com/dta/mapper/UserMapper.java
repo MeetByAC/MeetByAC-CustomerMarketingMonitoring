@@ -34,13 +34,13 @@ public interface UserMapper {
     void insert(User user);
 
     /**
-     * 根据id查询用户
+     * 根据工号查询用户
      *
-     * @param id
+     * @param jobNumber
      * @return
      */
-    @Select("select * from user where id = #{id}")
-    User listById(Integer id);
+    @Select("select * from user where jobNumber = #{jobNumber}")
+    User listByjobNumber(String jobNumber);
 
     /**
      * 修改用户

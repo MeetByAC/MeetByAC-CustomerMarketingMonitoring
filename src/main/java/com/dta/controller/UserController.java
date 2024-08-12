@@ -68,15 +68,15 @@ public class UserController {
     }
 
     /**
-     * 根据id查询用户
-     * @param id
+     * 根据工号查询用户
+     * @param jobNumber
      * @return
      */
-    @GetMapping("/{id}")
-    public Result listById(@PathVariable Integer id){
-        log.info("根据id查询用户, id: {}", id);
-        //调用service根据id查询用户
-        User user = userService.listById(id);
+    @GetMapping("/{jobNumber}")
+    public Result listByjobNumber(@PathVariable String jobNumber){
+        log.info("根据工号查询用户, jobNumber: {}", jobNumber);
+        //调用service根据工号查询用户
+        User user = userService.listByjobNumber(jobNumber);
         return Result.success(user);
     }
 

@@ -79,13 +79,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 根据id查询用户
-     * @param id
+     * 根据工号查询用户
+     * @param jobNumber
      * @return
      */
     @Override
-    public User listById(Integer id) {
-        return userMapper.listById(id);
+    public User listByjobNumber(String jobNumber) {
+        return userMapper.listByjobNumber(jobNumber);
     }
 
     /**
