@@ -88,7 +88,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public PageBean managerPage(Integer page, Integer pageSize, String jobNumber) {
         //1. 设置分页参数, 第一个参数表示从第几页开始，第二个参数表示一页显示多少条记录
-        PageHelper.startPage(page, pageSize);
+        // PageHelper.startPage(page, pageSize);
 
         //2.查询管理员所在部门并查找该部门下客户经理的id的list
         Integer dept = transactionMapper.findDept(jobNumber);

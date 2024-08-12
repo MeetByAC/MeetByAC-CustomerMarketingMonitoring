@@ -84,13 +84,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-<<<<<<< HEAD
-    public User listByjobNumber(String jobNumber) {
-        return userMapper.listByjobNumber(jobNumber);
-=======
     public User listByJobNumber(String jobNumber) {
         return userMapper.listByJobNumbe(jobNumber);
->>>>>>> 81e4df66021df47d7f81cb1193d8c79f5a6e7192
+
     }
 
     /**
