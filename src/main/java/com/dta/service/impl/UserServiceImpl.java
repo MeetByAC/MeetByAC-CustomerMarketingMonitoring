@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     public void save(User user) {
         //如果没有设置密码，则使用123456作为默认密码
         if(user.getPassword() == null || user.getPassword() == ""){
-            user.setPassword("123456");
+            user.setPassword(DigestUtils.md5DigestAsHex((SALT + "123456").getBytes()));
         }
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
@@ -96,7 +96,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         user.setUpdateTime(LocalDateTime.now());
-        user.setPassword(DigestUtils.md5DigestAsHex((SALT + user.getPassword()).getBytes()));
+        if(user.getPassword() != null && user.getPassword() != ""){
+            user.setPassword(DigestUtils.md5DigestAsHex((SALT + user.getPassword()).getBytes()));
+        }
         userMapper.update(user);
     }
 
