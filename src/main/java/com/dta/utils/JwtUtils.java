@@ -16,9 +16,9 @@ public class JwtUtils {
 //    private static final String signKey = "CMM";
     private static byte[] signKey = "CQ".getBytes(StandardCharsets.UTF_8);
     /**
-     * 令牌有效时间，3分钟
+     * 令牌有效时间，30分钟
      */
-    private static final Long expire = 1000L * 60 * 3;
+    private static final Long expire = 1000L * 60 * 30;
 
     /**
      * 生成Jwt令牌
@@ -43,11 +43,27 @@ public class JwtUtils {
      * @return
      */
     public static Claims parseJWT(String jwt) {
+
         Claims claims = Jwts.
                 parser().
                 setSigningKey(signKey).
-                parseClaimsJws(jwt).
+                parseClaimsJws(extractJwtToken(jwt)).
                 getBody();
         return claims;
+    }
+
+    /**
+     * 提取jwt令牌，过滤令牌开头的Bearer
+     *
+     * @param authorizationHeader
+     * @return
+     */
+    public static String extractJwtToken(String authorizationHeader) {
+        String tokenPrefix = "Bearer";
+        if (authorizationHeader.startsWith(tokenPrefix)) {
+            return authorizationHeader.substring(tokenPrefix.length());
+        }
+//        return authorizationHeader; // 如果没有 "Bearer " 前缀，直接返回原始字符串
+        return null;
     }
 }
