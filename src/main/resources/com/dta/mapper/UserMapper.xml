@@ -40,7 +40,7 @@
 
     <!-- 条件查询-->
     <select id="list" resultType="com.dta.pojo.User">
-        select *
+        select  id,username,jobNumber,dept,role,create_time,update_time
         from user
         <where>
             <if test="jobNumber != null and jobNumber !=''">

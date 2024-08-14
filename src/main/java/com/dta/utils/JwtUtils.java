@@ -59,11 +59,10 @@ public class JwtUtils {
      * @return
      */
     public static String extractJwtToken(String authorizationHeader) {
-        String tokenPrefix = "Bearer";
+        String tokenPrefix = "Bearer ";
         if (authorizationHeader.startsWith(tokenPrefix)) {
             return authorizationHeader.substring(tokenPrefix.length());
         }
-//        return authorizationHeader; // 如果没有 "Bearer " 前缀，直接返回原始字符串
-        return null;
+        return authorizationHeader; // 如果没有 "Bearer " 前缀，直接返回原始字符串
     }
 }

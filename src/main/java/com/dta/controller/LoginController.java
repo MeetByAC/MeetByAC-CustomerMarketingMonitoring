@@ -32,7 +32,7 @@ public class LoginController {
     private UserMapper userMapper;
 
     //SM4 私钥
-    private static final String KEY = "1234567890abcdef";
+    private static final String KEY = "010203040506070809000a0b0c0d0e0f";
 
     //加入国密SM4之后的登录接口
     @PostMapping("/login")

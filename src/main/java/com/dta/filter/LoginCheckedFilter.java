@@ -38,11 +38,11 @@ public class LoginCheckedFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
-        //3.获取请求头token，返回的就是前端携带过来的令牌
-        String jwt = request.getHeader("token");
+        //3.获取请求头Authorization，返回的就是前端携带过来的令牌
+        String jwt = request.getHeader("Authorization");
         if(jwt == null){
             // 返回登录界面
-            Result notLogin = Result.error("NOT_LOGIN");
+            Result notLogin = Result.error("jwt is null");
             //把notLogin对象转换为JSON字符串返回
             String jsonString = JSONObject.toJSONString(notLogin);
             //按照前端约定好的json格式的数据返回
@@ -55,7 +55,7 @@ public class LoginCheckedFilter implements Filter {
         }catch (Exception e){
             //令牌存在问题
             //返回登录页面
-            Result notLogin = Result.error("NOT_LOGIN");
+            Result notLogin = Result.error("jwt is invalid");
             //把notLogin对象转换为JSON字符串返回
             String jsonString = JSONObject.toJSONString(notLogin);
             //按照前端约定好的json格式的数据返回

@@ -40,7 +40,9 @@ public class SM4Utils {
      * @throws Exception 异常
      */
     public static String decrypt(String encryptedData, String key) throws Exception {
-        byte[] keyBytes = key.getBytes(ENCODING);
+        // 将密钥从十六进制字符串转换为字节数组
+        byte[] keyBytes = hexStringToByteArray(key);
+
         byte[] encryptedBytes = Hex.decode(encryptedData);
 
         SM4Engine engine = new SM4Engine();
@@ -53,4 +55,22 @@ public class SM4Utils {
 
         return new String(decryptedBytes, 0, len, ENCODING);
     }
+
+    /**
+     *
+     * 辅助函数：将十六进制字符串转换为字节数组
+     * @param s
+     * @return
+     */
+    private static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+
 }
+

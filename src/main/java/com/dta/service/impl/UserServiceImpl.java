@@ -72,6 +72,8 @@ public class UserServiceImpl implements UserService {
         //如果没有设置密码，则使用123456作为默认密码
         if(user.getPassword() == null || user.getPassword() == ""){
             user.setPassword(DigestUtils.md5DigestAsHex((SALT + "123456").getBytes()));
+        }else {
+            user.setPassword(DigestUtils.md5DigestAsHex((SALT + user.getPassword()).getBytes()));
         }
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
@@ -120,6 +122,7 @@ public class UserServiceImpl implements UserService {
         if(StringUtils.isAnyBlank(jobNumber,password)){
             return null;
         }
+        System.out.println(password);
         //2.加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
 
